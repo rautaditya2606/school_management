@@ -5,24 +5,7 @@ const MAX_RETRIES = 5;
 const INITIAL_RETRY_DELAY = 1000;
 
 function getConnectionConfig() {
-    // For Railway MySQL
-    if (process.env.MYSQL_URL || process.env.DATABASE_URL) {
-        const url = new URL(process.env.MYSQL_URL || process.env.DATABASE_URL);
-        return {
-            host: url.hostname,
-            user: url.username,
-            password: url.password,
-            database: url.pathname.substring(1),
-            port: url.port || 3306,
-            ssl: {
-                rejectUnauthorized: false
-            },
-            connectTimeout: 10000,
-            waitForConnections: true
-        };
-    }
-
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === 'production' && process.env.MYSQL_URL) {
         const url = new URL(process.env.MYSQL_URL);
         return {
             host: url.hostname,
@@ -39,23 +22,7 @@ function getConnectionConfig() {
         };
     }
 
-    if (process.env.MYSQL_URL) {
-        try {
-            const url = new URL(process.env.MYSQL_URL);
-            return {
-                host: url.hostname,
-                user: url.username,
-                password: url.password,
-                database: url.pathname.substring(1),
-                port: url.port || 3306,
-                ssl: process.env.NODE_ENV === 'production'
-            };
-        } catch (err) {
-            console.error('Error parsing MYSQL_URL:', err);
-        }
-    }
-
-    // Fallback to individual environment variables
+    // Fallback to local config
     return {
         host: process.env.DB_HOST,
         user: process.env.DB_USER,
@@ -64,10 +31,7 @@ function getConnectionConfig() {
         port: process.env.DB_PORT || 3306,
         connectTimeout: 10000,
         waitForConnections: true,
-        connectionLimit: 10,
-        maxIdle: 10,
-        idleTimeout: 60000,
-        queueLimit: 0
+        connectionLimit: 10
     };
 }
 
