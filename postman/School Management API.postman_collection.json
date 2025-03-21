@@ -1,0 +1,71 @@
+{
+	"info": {
+		"_postman_id": "b2e6228a-7faf-4aea-a5b2-215086b3a4b8",
+		"name": "School Management API",
+		"description": "API collection for School Management System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39844210"
+	},
+	"item": [
+		{
+			"name": "List Schools",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/listSchools?latitude=51.5074&longitude=-0.1278",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"listSchools"
+					],
+					"query": [
+						{
+							"key": "latitude",
+							"value": "51.5074"
+						},
+						{
+							"key": "longitude",
+							"value": "-0.1278"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add School",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Test School\",\n    \"address\": \"123 Test St\",\n    \"latitude\": 51.5074,\n    \"longitude\": -0.1278\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/addSchool",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"addSchool"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}
