@@ -5,31 +5,16 @@ const MAX_RETRIES = 5;
 const RETRY_INTERVAL = 5000;
 
 function getConnectionConfig() {
-    if (process.env.DATABASE_URL) {
-        // Parse DATABASE_URL for production
-        try {
-            const url = new URL(process.env.DATABASE_URL);
-            return {
-                host: url.hostname,
-                user: url.username,
-                password: url.password,
-                database: url.pathname.substring(1),
-                port: url.port || 3306,
-                ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
-            };
-        } catch (err) {
-            console.error('Error parsing DATABASE_URL:', err);
-        }
-    }
-
-    // Fallback to individual environment variables
     return {
         host: process.env.DB_HOST,
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
         port: process.env.DB_PORT || 3306,
-        ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+        ssl: false,
+        authPlugins: {
+            mysql_native_password: () => ({})
+        }
     };
 }
 
@@ -37,7 +22,7 @@ function createPool() {
     const config = getConnectionConfig();
     console.log('Attempting to connect to database with config:', {
         ...config,
-        password: config.password ? '***' : undefined
+        password: '***'
     });
 
     return mysql.createPool({
