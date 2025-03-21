@@ -1,0 +1,45 @@
+<h2>Schools List</h2>
+
+<div class="mb-4">
+    <form class="row g-3" method="GET">
+        <div class="col-md-4">
+            <label class="form-label">Latitude</label>
+            <input type="number" step="any" name="latitude" class="form-control" value="<%= userLocation?.latitude %>">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Longitude</label>
+            <input type="number" step="any" name="longitude" class="form-control" value="<%= userLocation?.longitude %>">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">&nbsp;</label>
+            <button type="submit" class="btn btn-primary d-block">Sort by Distance</button>
+        </div>
+    </form>
+</div>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Coordinates</th>
+                <% if (userLocation) { %>
+                    <th>Distance</th>
+                <% } %>
+            </tr>
+        </thead>
+        <tbody>
+            <% schools.forEach(school => { %>
+                <tr>
+                    <td><%= school.name %></td>
+                    <td><%= school.address %></td>
+                    <td><%= school.latitude %>, <%= school.longitude %></td>
+                    <% if (userLocation) { %>
+                        <td><%= school.distance.value %> <%= school.distance.unit %></td>
+                    <% } %>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
